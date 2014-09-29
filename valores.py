@@ -3,7 +3,7 @@
 #  valores btc usd y VEB
 #  
 #  Copyright 2014 David Rodriguez <davidrodriguez at gmail dot com>
-#  
+#  el  api es gracias a la gente de bitven.com @diariobitcoin y dolartoday 
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
 #  the Free Software Foundation; either version 2 of the License, or
@@ -24,27 +24,82 @@
 
 
 #importando los  modulos a usar
-import urllib2
+import urllib2, cookielib
 import simplejson
-import json 
+import json
+import requests
+from pyquery import PyQuery
+rv=''
+rk=''
+mb=''
+ecu1=''
 
-#esta es la url donde esta el archivo json 
-url = "http://api.bitven.com/prices"
- 
-#Aqui usamos urllib2 para abrir la pagina 
-resp = urllib2.Request(url)
-opener = urllib2.build_opener()
-#aqui obtenemos la data
-data = opener.open(resp)
-#en este punto  decodificamos la data y podemos separar lo que necesitemos 
-result = simplejson.load(data)
-# Se separa las llaves 
-rk=result.keys()
-# Se separan los valores
-rv=result.values()
- 
-# Se formatea el resultado de lo requerido 
-print 'bitcoin   | dolartoday'
-print '%s | %s' % (rk[0], ' '+ rk[1])
-print '-' * 30
-print str(rv[0]), '       |        ' + str(rv[1])
+
+def btcval():
+	#esta es la url donde esta el archivo json 
+	url = "http://api.bitven.com/prices"
+	#Aqui usamos urllib2 para abrir la pagina 
+	resp = urllib2.Request(url)
+	opener = urllib2.build_opener()
+	#aqui obtenemos la data
+	data = opener.open(resp)
+	#en este punto  decodificamos la data y podemos separar lo que necesitemos 
+	result = simplejson.load(data)
+	# Se separa las llaves 
+	rk=result.keys()
+	# Se separan los valores
+	rv=result.values()
+	# se  multiplica los  valores para tener el valor del Bolivar 
+	mb= rv[1]*rv[0]
+	
+	# precio de el bitcoin dado por coinbase
+	USER_AGENT = 'Mozilla/5.0'
+	coinbase_URL = 'http://www.coinbase.com'
+	cb = coinbase_URL
+	headers = {'User-Agent': USER_AGENT}
+	##urlib html
+	resp = urllib2.Request(cb)
+	opener = urllib2.build_opener()
+	#aqui obtenemos la data
+	data = opener.open(resp)
+
+	cba = PyQuery(requests.get(cb, headers=headers).content).find('.top-balance').text().replace('Buy Price: $', '')
+
+	
+		
+		 
+	# Se formatea el resultado de lo requerido 
+	print '**********************************************************'
+	print 'Tasas del mercado actual de divisas                       '
+	print '**********************************************************'
+	print 'Bitcoin         |       Dolartoday         |  Bolivar     '
+	print '**********************************************************'
+	print '%s   | %s   |   %s' % (rk[0], ' '+ rk[1], ' '+ "Bolivar")
+	print '-' * 60
+	print str(rv[0]),' ฿ ' '     |    ' + str(rv[1]),' $. ' '     |    '+str(mb), ' Bs. '
+	print '**********************************************************'
+	print '                                                          '
+	print '                                                          '
+	print '                                                          '
+	print '                                                          '
+	print '**********************************************************'
+	print '     Ecuaciones de compra eficiente de btc                '
+	print '**********************************************************'
+	print '* formula usada:                                         *'
+	print '* coinbaseusd_ask*dolartoday*1,3                         *'
+	print "*  precio coinbase    ", cba, "$                          *"
+	coinbaseusd_ask = cba
+	dl=rv[1]
+	com=1.03
+	ecu1= float(coinbaseusd_ask)*dl*com
+	print "*  serian " , ecu1,"bolivares por bitcoin            *"
+	print '*                                                        *'
+	print '*                                                        *'	
+		
+		
+	return 0
+		
+		
+btcval()
+
+

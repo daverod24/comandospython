@@ -79,24 +79,7 @@ def btcval():
 	droid.dialogSetPositiveButtonText('Aceptar')
 	#Se muestra la ventana
 	droid.dialogShow()
-	
-	
-		
-	
-	
-	
-	
-	"""
-	print "*  precio coinbase    ", cba, "$       *"
-	coinbaseusd_ask = cba
-	dl=rv[1]
-	com=1.03
-	ecu1= float(coinbaseusd_ask)*dl*com
-	print "*  serian " , ecu1,"bolivares por bitcoin  *"
-	print "*                                           "
-	print "*                                           "	
-	#"""
-	#comentarios finales
+
 	return 0
 		
 		

@@ -27,6 +27,7 @@
 import urllib2, cookielib
 import simplejson
 import json
+from pprint import pprint
 import requests
 from pyquery import PyQuery
 rv=''
@@ -36,11 +37,19 @@ ecu1=''
 
 
 def btcval():
-	#esta es la url donde esta el archivo json 
+	#esta son urls donde estan los archivos json 
 	url = "http://api.bitven.com/prices"
+	urlbdt = "http://api.bitcoinvenezuela.com/DolarToday.php?json=yes"
 	#Aqui usamos urllib2 para abrir la pagina 
 	resp = urllib2.Request(url)
 	opener = urllib2.build_opener()
+	###############################
+	jbtcven = urllib2.urlopen(urlbdt)
+	jbv = json.load(jbtcven)
+	val= jbv.values()
+	key= jbv.keys()
+	
+	#################################
 	#aqui obtenemos la data
 	data = opener.open(resp)
 	#en este punto  decodificamos la data y podemos separar lo que necesitemos 
@@ -69,33 +78,31 @@ def btcval():
 		
 		 
 	# Se formatea el resultado de lo requerido 
-	print '**********************************************************'
-	print 'Tasas del mercado actual de divisas                       '
-	print '**********************************************************'
-	print 'Bitcoin         |       Dolartoday         |  Bolivar     '
-	print '**********************************************************'
-	print '%s   | %s   |   %s' % (rk[0], ' '+ rk[1], ' '+ "Bolivar")
-	print '-' * 60
-	print str(rv[0]),' ฿ ' '     |    ' + str(rv[1]),' $. ' '     |    '+str(mb), ' Bs. '
-	print '**********************************************************'
-	print '                                                          '
-	print '                                                          '
-	print '                                                          '
-	print '                                                          '
-	print '**********************************************************'
-	print '     Ecuaciones de compra eficiente de btc                '
-	print '**********************************************************'
-	print '* formula usada:                                         *'
-	print '* coinbaseusd_ask*dolartoday*1,3                         *'
-	print "*  precio coinbase    ", cba, "$                          *"
+	print '********************************************'
+	print 'Tasas del mercado actual de divisas        '
+	print '********************************************'
+	print 'Bitcoin    |    Dolartoday     |  Bolivar ' 
+	print '********************************************'
+	print str(rv[0]),' ฿ ' '  |  ' + str(rv[1]),' $. ' ' |  '+str(mb), ' Bs. '
+	print '********************************************'
+	print '                                          '
+	print '                                          '
+	print '                                          '
+	print '                                          '
+	print '********************************************'
+	print '    Ecuaciones de compra eficiente de btc   '
+	print '********************************************'
+	print '* formula usada:                            *'
+	print '* coinbaseusd_ask*dolartoday*1,3            *'
+	print "*  precio coinbase    ", cba, "$             *"
 	coinbaseusd_ask = cba
 	dl=rv[1]
 	com=1.03
 	ecu1= float(coinbaseusd_ask)*dl*com
-	print "*  serian " , ecu1,"bolivares por bitcoin            *"
-	print '*                                                        *'
-	print '*                                                        *'	
-		
+	print "* serian " , ecu1,"bolivares por bitcoin *"
+	print "*                                           *"
+	print '*                                           *'	
+	
 		
 	return 0
 		
